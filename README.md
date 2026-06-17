@@ -224,6 +224,12 @@ jira-automation-bot/
 
 ---
 
+# Done by
+
+*Ruveeha Ashfaq and Haziq Afzal
+
+---
+
 # 💼 Outcome
 
 You built a real-world automation system using Python and Jira API — the kind of backend integration used in real companies.
