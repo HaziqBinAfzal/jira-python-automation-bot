@@ -218,7 +218,7 @@ This script connects Python with Jira API and:
 
 ---
 
-# 🧠 WHAT I LEARNED
+# 🧠 WHAT WE LEARNED
 
 * REST API integration
 * Authentication using API tokens
