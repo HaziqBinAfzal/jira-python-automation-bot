@@ -1,18 +1,16 @@
-# 🚀 Jira Python Automation Bot
+ 🚀 Jira Python Automation Bot
 
-A Python-based automation project that integrates with **Atlassian Jira REST API** to automatically create and manage issues (tasks).
-
-This project demonstrates real-world backend/API automation using Python.
+A Python-based automation project that integrates with **Atlassian Jira REST API** to automate issue creation, management, and workflow tasks.
 
 ---
 
-# 📌 Features
+# 🧠 What this project does
 
-* Create Jira issues automatically using Python
-* Bulk issue generation (automation loop)
-* REST API integration with Jira
-* Secure authentication using API token
-* Git + GitHub workflow ready project
+* Connects Python to Jira API
+* Authenticates using API token
+* Fetches Jira projects
+* Creates issues automatically
+* Can be extended for full automation workflows
 
 ---
 
@@ -21,25 +19,24 @@ This project demonstrates real-world backend/API automation using Python.
 * Python
 * Jira REST API
 * Requests library
-* Python-dotenv (optional)
-* Git & GitHub
+* Ubuntu (Linux environment)
 
 ---
 
-# ⚙️ FULL PROJECT SETUP (STEP BY STEP WITH COMMANDS)
+# ⚙️ STEP-BY-STEP SETUP (UBUNTU MATE)
 
 ---
 
-## 🚀 Step 1: Create project folder
+## 🟢 Step 1: Create project folder
 
 ```bash
-mkdir jira-python-automation-bot
-cd jira-python-automation-bot
+mkdir jira-automation-bot
+cd jira-automation-bot
 ```
 
 ---
 
-## 🐍 Step 2: Create virtual environment
+## 🟡 Step 2: Create virtual environment
 
 ```bash
 python3 -m venv venv
@@ -48,7 +45,7 @@ source venv/bin/activate
 
 ---
 
-## 📦 Step 3: Install dependencies
+## 🔵 Step 3: Install dependencies
 
 ```bash
 pip install requests python-dotenv
@@ -56,7 +53,7 @@ pip install requests python-dotenv
 
 ---
 
-## 📄 Step 4: Save dependencies
+## 🟣 Step 4: Save dependencies
 
 ```bash
 pip freeze > requirements.txt
@@ -64,187 +61,170 @@ pip freeze > requirements.txt
 
 ---
 
-## 📁 Step 5: Create project files
+## 🟠 Step 5: Create files
 
 ```bash
-touch main.py .env README.md .gitignore
+touch main.py .env
 ```
 
 ---
 
-## 🔐 Step 6: Setup environment variables
+## 🔐 Step 6: Setup `.env`
 
 ```bash
 nano .env
 ```
 
-Add:
-
 ```env
 JIRA_EMAIL=your-email@example.com
 JIRA_API_TOKEN=your-api-token
 JIRA_URL=https://your-domain.atlassian.net
+JIRA_PROJECT_KEY=HR
 ```
 
 ---
 
-## 🧠 Step 7: Run your Python script
+## 🧪 Step 7: Test connection (GET projects)
+
+```python
+import os
+import requests
+from requests.auth import HTTPBasicAuth
+from dotenv import load_dotenv
+
+load_dotenv()
+
+EMAIL = os.getenv("JIRA_EMAIL")
+TOKEN = os.getenv("JIRA_API_TOKEN")
+URL = os.getenv("JIRA_URL")
+
+auth = HTTPBasicAuth(EMAIL, TOKEN)
+
+r = requests.get(f"{URL}/rest/api/3/project", auth=auth)
+
+print(r.status_code)
+print(r.text)
+```
+
+---
+
+## 🚀 Step 8: Run script
 
 ```bash
 python3 main.py
 ```
 
----
+Expected:
 
-# 🔍 DEBUGGING / TESTING COMMANDS USED
-
-## Check logged-in user (API test)
-
-```bash
-python3 main.py
 ```
-
-OR:
-
-```bash
-curl -u email:token https://your-domain.atlassian.net/rest/api/3/myself
+Status Code: 200
 ```
 
 ---
 
-## List all Jira projects (VERY IMPORTANT STEP)
+## 🔥 Step 9: Create Jira Issue (FINAL SCRIPT)
 
-```bash
-python3 list_projects.py
-```
+```python
+import os
+import requests
+from requests.auth import HTTPBasicAuth
+from dotenv import load_dotenv
+import json
 
-OR API endpoint:
+load_dotenv()
 
-```
-GET /rest/api/3/project/search
+EMAIL = os.getenv("JIRA_EMAIL")
+TOKEN = os.getenv("JIRA_API_TOKEN")
+URL = os.getenv("JIRA_URL")
+PROJECT_KEY = os.getenv("JIRA_PROJECT_KEY")
+
+auth = HTTPBasicAuth(EMAIL, TOKEN)
+
+headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+}
+
+issue_data = {
+    "fields": {
+        "project": {
+            "key": PROJECT_KEY
+        },
+        "summary": "🔥 Automated issue from Python bot",
+        "issuetype": {
+            "name": "Task"
+        }
+    }
+}
+
+response = requests.post(
+    f"{URL}/rest/api/3/issue",
+    headers=headers,
+    auth=auth,
+    data=json.dumps(issue_data)
+)
+
+print(response.status_code)
+print(response.text)
 ```
 
 ---
 
-# 🚀 RUN PROJECT
+# 🎯 Expected Output
 
-```bash
-python3 main.py
-```
-
-Expected output:
-
-```text
+```json
 Status Code: 201
-{"key":"HR-1"}
+{"key": "HR-1"}
 ```
 
 ---
 
-# 📤 GIT & GITHUB SETUP
-
----
-
-## Step 1: Initialize repo
+# 📤 GitHub Commands
 
 ```bash
 git init
-```
-
----
-
-## Step 2: Add files
-
-```bash
 git add .
-```
-
----
-
-## Step 3: Commit project
-
-```bash
 git commit -m "Initial commit - Jira automation bot"
-```
-
----
-
-## Step 4: Set main branch
-
-```bash
 git branch -M main
-```
-
----
-
-## Step 5: Connect GitHub repo
-
-```bash
-git remote add origin https://github.com/your-username/your-repo-name.git
-```
-
----
-
-## Step 6: Push to GitHub
-
-```bash
+git remote add origin YOUR_REPO_URL
 git push -u origin main
 ```
 
 ---
 
-# 🧹 CLEAN PROJECT STRUCTURE
+# 📁 Final Project Structure
 
 ```
-jira-python-automation-bot/
+jira-automation-bot/
 │
 ├── main.py
 ├── requirements.txt
 ├── README.md
-├── .gitignore
-└── .env (NOT PUSHED TO GITHUB)
+├── .env (DO NOT PUSH)
+└── venv/
 ```
 
 ---
 
-# 🔥 WHAT THIS PROJECT DOES
+# 🚫 Important Rules
 
-This script connects Python with Jira API and:
-
-* Authenticates user
-* Sends POST request
-* Creates tasks inside a project
-* Automates issue creation
+* Never upload `.env`
+* Never expose API token
+* Always use correct Jira project key (example: `HR`)
 
 ---
 
-# 🧠 WHAT WE LEARNED
+# 📚 What you learned
 
 * REST API integration
-* Authentication using API tokens
-* Working with JSON payloads
+* Authentication handling
 * Automation using Python
-* Git & GitHub workflow
-* Jira project structure
+* Working with Jira projects
+* Linux development environment setup
 
 ---
 
-# 🚫 IMPORTANT NOTES
+# 💼 Outcome
 
-* Never upload `.env` to GitHub
-* Never expose API tokens publicly
-* Always use virtual environment
-* Always verify Jira project key before API calls
-
----
-
-# 👤 AUTHOR
-
-Built as a learning project for API automation using Python and Jira.
-
----
-
-# 💥 RESULT
-
-You successfully built a real automation system that interacts with Jira like a backend engineer.
+You built a real-world automation system using Python and Jira API — the kind of backend integration used in real companies.
 
